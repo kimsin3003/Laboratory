@@ -21,23 +21,20 @@ void UDoorOpener::BeginPlay()
 	Super::BeginPlay();
 
 	m_actorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
-	
-
+	m_owner = GetOwner();
 }
 
 
 void UDoorOpener::OpenDoor()
 {
-	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(m_openAngle);
+	m_owner->SetActorRotation(m_openAngle);
 }
 
 void UDoorOpener::CloseDoor()
 {
-	AActor* Owner = GetOwner();
-	Owner->SetActorRotation(m_closeAngle);
+	m_owner->SetActorRotation(m_closeAngle);
 }
-// Called every frame
+
 void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
@@ -48,7 +45,7 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 		m_lastOpenTime = GetWorld()->GetTimeSeconds();
 	}
 
-	if (GetWorld()->GetTimeSeconds() - m_lastOpenTime > m_closeDelay)
+	if (GetWorld()->GetTimeSeconds() - m_lastOpenTime >= m_closeDelay)
 	{
 		CloseDoor();
 	}
