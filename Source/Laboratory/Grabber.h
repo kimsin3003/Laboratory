@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Components/InputComponent.h"
+#include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Grabber.generated.h"
 
 
@@ -25,8 +27,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
-	UPROPERTY(EditAnywhere)
-		float m_reach = 100.f;
-		
-	
+	float m_reach = 100.0f;
+	UPhysicsHandleComponent* m_physicsHandle = nullptr;
+	UInputComponent* m_inputComponent = nullptr;
+
+	void Grab();
 };
