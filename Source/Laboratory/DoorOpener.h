@@ -25,9 +25,11 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
 private:
 	void OpenDoor();
 	void CloseDoor();
+	float GetTotalMassOfActorsOnPlate();
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* m_triggerVolume = nullptr;
 
@@ -37,8 +39,6 @@ private:
 	FRotator m_openAngle;
 	UPROPERTY(EditAnywhere)
 	FRotator m_closeAngle;
-
-	AActor* m_actorThatOpens = nullptr;
 	AActor* m_owner = nullptr;
 	float m_lastOpenTime = 0;
 	

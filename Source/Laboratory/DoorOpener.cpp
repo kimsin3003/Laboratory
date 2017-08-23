@@ -3,6 +3,7 @@
 #include "DoorOpener.h"
 #include "Engine/World.h"
 #include "Runtime/Engine/Classes/GameFramework/PlayerController.h"
+#include "Runtime/Engine/Classes/Components/PrimitiveComponent.h"
 
 // Sets default values for this component's properties
 UDoorOpener::UDoorOpener()
@@ -20,7 +21,6 @@ void UDoorOpener::BeginPlay()
 {
 	Super::BeginPlay();
 
-	m_actorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
 	m_owner = GetOwner();
 }
 
@@ -39,7 +39,7 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (m_triggerVolume->IsOverlappingActor(m_actorThatOpens))
+	if (GetTotalMassOfActorsOnPlate() > 30.f)
 	{
 		OpenDoor();
 		m_lastOpenTime = GetWorld()->GetTimeSeconds();
@@ -49,5 +49,18 @@ void UDoorOpener::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 	{
 		CloseDoor();
 	}
+}
+
+float UDoorOpener::GetTotalMassOfActorsOnPlate()
+{
+	float totalMass = 0.0f;
+	TArray<AActor*> overlappingActors;
+	m_triggerVolume->GetOverlappingActors(overlappingActors);
+	for(auto& actor : overlappingActors)
+	{
+		totalMass += actor->FindComponentByClass<UPrimitiveComponent>()->GetMass();
+		UE_LOG(LogTemp, Warning, TEXT("%s on pressure plate"), *actor->GetName());
+	}
+	return totalMass;
 }
 
