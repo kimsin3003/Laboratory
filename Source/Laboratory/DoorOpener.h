@@ -7,6 +7,7 @@
 #include "Engine/TriggerVolume.h"
 #include "DoorOpener.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FDoorEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class LABORATORY_API UDoorOpener : public UActorComponent
@@ -27,19 +28,16 @@ public:
 
 
 private:
-	void OpenDoor();
-	void CloseDoor();
 	float GetTotalMassOfActorsOnPlate();
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* m_triggerVolume = nullptr;
-
 	UPROPERTY(EditAnywhere)
-	float m_closeDelay = 0;
-	UPROPERTY(EditAnywhere)
-	FRotator m_openAngle;
-	UPROPERTY(EditAnywhere)
-	FRotator m_closeAngle;
-	AActor* m_owner = nullptr;
-	float m_lastOpenTime = 0;
+		float m_triggerMass = 30.0f;
 	
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnOpen;
+	UPROPERTY(BlueprintAssignable)
+	FDoorEvent OnClose;
+
+	AActor* m_owner = nullptr;
 };
